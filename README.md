@@ -1,13 +1,58 @@
 # FindSGJobs Interactive Search (Streamlit)
 
-This is a small Streamlit app that queries the FindSGJobs API to provide an interactive job search UI (category, employment type, nearest MRT, keywords, pagination).
+This is a Streamlit-based wrapper for the FindSGJobs API, providing an interactive job search interface. It abstracts the underlying API complexity while offering a user-friendly UI for searching Singapore job listings.
 
 ## Features
 - Search Singapore job listings using the FindSGJobs API
 - Filter by job category, employment type, and nearest MRT station
 - View listings in a table and expand individual job descriptions
 
+## Architecture
+This application functions as an API wrapper, providing several layers of abstraction:
+
+1. **API Integration Layer**
+   - Encapsulates the FindSGJobs API endpoint
+   - Handles HTTP requests and error management
+   - Manages API parameters and response parsing
+
+2. **Data Transformation Layer**
+   - Converts API codes to human-readable labels
+   - Formats salary ranges and concatenates multiple values
+   - Structures job descriptions and company information
+
+3. **Presentation Layer**
+   - Interactive Streamlit widgets for filtering
+   - Responsive data tables with expandable details
+   - Clean, user-friendly interface
+
+## API Documentation
+
+### Base Endpoint
+```
+https://www.findsgjobs.com/apis/job/searchable
+```
+
+### Parameters
+- `page`: Page number for pagination (default: 1)
+- `per_page_count`: Results per page (default: 20, max: 50)
+- `JobCategory`: Job category code (e.g., 1861 for IT)
+- `EmploymentType`: Employment type code (e.g., 76 for Full Time)
+- `id_Job_NearestMRTStation`: MRT station code
+- `keywords`: Search terms for job titles/descriptions
+
+### Response Format
+The API returns JSON with:
+- `data.result`: Array of job listings
+- `data.result_count`: Total number of matching jobs
+- Job details include:
+  - Title, company info, salary range
+  - Categories, employment types
+  - Nearest MRT stations
+  - Full job description (HTML format)
+
 ## Prerequisites
+
+### Environment
 - Python 3.8 or newer
 - Internet access (the app calls an external API)
 
@@ -67,14 +112,16 @@ streamlit run job_search_app.py
 
 Open the URL printed by Streamlit in your browser (usually http://localhost:8501).
 
-## Notes
-- The app uses the public API endpoint `https://www.findsgjobs.com/apis/job/searchable` as defined in `job_search_app.py`.
+## Technical Notes
+- All API calls go through the wrapper function `fetch_jobs(params)` in `job_search_app.py`
+- The wrapper includes error handling and timeout settings
 - Network connectivity is required for searches to work.
 - The `requirements.txt` lists the libraries detected in the code: `streamlit`, `pandas`, and `requests`.
 
 ## Troubleshooting
 - If Streamlit fails to start, confirm the Python executable in your PATH or activated virtual environment.
 - If API requests fail, ensure you have network access and the API endpoint is reachable.
+- Common API errors are handled with user-friendly messages
 
 ## License
 This repository does not include a license file. Add one if you plan to share the code publicly.
