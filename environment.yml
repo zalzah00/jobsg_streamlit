@@ -1,0 +1,11 @@
+name: jobsg
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - streamlit
+  - pandas
+  - requests
+  - pip
+  - pip:
+    - -r requirements.txt
